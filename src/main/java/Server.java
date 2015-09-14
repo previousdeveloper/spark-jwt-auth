@@ -1,6 +1,7 @@
 import DataAccess.ISignupRepository;
 import Model.UserSignupModel;
 import Service.IJwtAuthService;
+import Validation.ITokenValidation;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -16,12 +17,16 @@ public class Server {
         Injector injector = Guice.createInjector(new DIModule());
         ISignupRepository signupRepository = injector.getInstance(ISignupRepository.class);
         IJwtAuthService jwtAuthService = injector.getInstance(IJwtAuthService.class);
+        ITokenValidation tokenValidation = injector.getInstance( ITokenValidation.class);
 
 
-        String s = jwtAuthService.tokenGenerator("gokhan", "karadas");
+        String s = jwtAuthService.tokenGenerator("deneme", "deneme");
         System.out.println(s);
 
+        boolean b = tokenValidation.validateToken(s);
 
+
+        System.out.println(b);
         post("/salak", (request, response) -> {
             String author = request.queryParams("deneme");
 
