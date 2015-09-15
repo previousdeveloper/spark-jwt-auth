@@ -1,7 +1,7 @@
 import DataAccess.ISignupRepository;
-import Model.UserSignupModel;
+import Model.UserModel;
 import Service.IJwtAuthService;
-import Validation.ITokenValidation;
+import Validation.ITokenValidator;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -14,35 +14,35 @@ public class Server {
 
     public static void main(String[] args) {
 
-        Injector injector = Guice.createInjector(new DIModule());
+        Injector injector = Guice.createInjector(new AppModule());
         ISignupRepository signupRepository = injector.getInstance(ISignupRepository.class);
         IJwtAuthService jwtAuthService = injector.getInstance(IJwtAuthService.class);
-        ITokenValidation tokenValidation = injector.getInstance( ITokenValidation.class);
+        ITokenValidator tokenValidation = injector.getInstance( ITokenValidator.class);
 
 
         String s = jwtAuthService.tokenGenerator("deneme", "deneme");
         System.out.println(s);
 
-        boolean b = tokenValidation.validateToken(s);
+        boolean b = tokenValidation.validate(s);
 
 
         System.out.println(b);
         post("/salak", (request, response) -> {
             String author = request.queryParams("deneme");
 
-            UserSignupModel userSignupModel = new UserSignupModel();
+            UserModel userModel = new UserModel();
 
-            userSignupModel.setPassword(author);
+            userModel.setPassword(author);
 
-            signupRepository.saveUser(userSignupModel);
+            signupRepository.saveUser(userModel);
 
-            return userSignupModel.getPassword();
+            return userModel.getPassword();
         });
 
 
         //  System.out.println(jwtAuthServiceImpl.tokenGenerator("gokhan","karadas"));
 
 
-        //System.out.println(new TokenValidation().validateToken());
+        //System.out.println(new TokenValidator().validate());
     }
 }

@@ -1,23 +1,20 @@
 package Service;
 
-import Util.ICurrentTime;
-import Util.IKeyGenerator;
+import Util.Constant;
+import Util.ITimeProvider;
 import com.google.inject.Inject;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import java.security.Key;
-
 public class JwtAuthServiceImpl implements IJwtAuthService {
 
-    private ICurrentTime currentTime;
-    private IKeyGenerator keyGenerator;
+
+    private ITimeProvider currentTime;
 
     @Inject
-    public JwtAuthServiceImpl(ICurrentTime currentTime, IKeyGenerator keyGenerator) {
+    public JwtAuthServiceImpl(ITimeProvider currentTime) {
 
         this.currentTime = currentTime;
-        this.keyGenerator = keyGenerator;
     }
 
     public String tokenGenerator(String username, String password) {
@@ -25,13 +22,12 @@ public class JwtAuthServiceImpl implements IJwtAuthService {
 
         SignatureAlgorithm hs512 = SignatureAlgorithm.HS512;
 
-        Key key = keyGenerator.getKey();
 
         String token = Jwts.builder()
                 .claim("username", username)
                 .claim("password", password)
                 .claim("expireTime", currentTime.getCurrentTime())
-                .signWith(hs512, new byte[1])
+                .signWith(hs512, Constant.JWT_SECRET)
                 .compact();
 
         return token;

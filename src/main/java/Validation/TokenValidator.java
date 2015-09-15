@@ -1,6 +1,6 @@
 package Validation;
 
-import RedisContext.IRedis;
+import RedisProvider.IRedis;
 import Util.IKeyGenerator;
 import com.google.inject.Inject;
 import io.jsonwebtoken.Jwts;
@@ -10,19 +10,19 @@ import java.security.Key;
 /**
  * Created by previousdeveloper on 14.09.2015.
  */
-public class TokenValidation implements ITokenValidation {
+public class TokenValidator implements ITokenValidator {
 
     private IKeyGenerator keyGenerator;
     private IRedis redis;
 
     @Inject
-    public TokenValidation(IKeyGenerator keyGenerator,IRedis redis) {
+    public TokenValidator(IKeyGenerator keyGenerator, IRedis redis) {
         this.keyGenerator = keyGenerator;
-        this.redis =redis;
+        this.redis = redis;
 
     }
 
-    public boolean validateToken(String token) {
+    public boolean validate(String token) {
 
         boolean valid = false;
 
@@ -37,7 +37,7 @@ public class TokenValidation implements ITokenValidation {
         Object expireTime = Jwts.parser().setSigningKey(new byte[1]).parseClaimsJws(token)
                 .getHeader().get("expireTime");
 
-        String signUp = redis.jedis().get("signUp");
+        String signUp = redis.get("signUp");
 
         return valid;
     }

@@ -3,7 +3,7 @@ package Model;
 /**
  * Created by previousdeveloper on 14.09.2015.
  */
-public class UserSignupModel {
+public class UserModel {
     private String username;
     private String password;
 
@@ -25,7 +25,7 @@ public class UserSignupModel {
 
     @Override
     public String toString() {
-        return "UserSignupModel{" +
+        return "UserModel{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';

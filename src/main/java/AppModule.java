@@ -1,29 +1,29 @@
 import DataAccess.ISignupRepository;
 import DataAccess.SignupRepositoryImpl;
-import RedisContext.IRedis;
-import RedisContext.RedisImpl;
+import RedisProvider.IRedis;
+import RedisProvider.RedisImpl;
 import Service.IJwtAuthService;
 import Service.JwtAuthServiceImpl;
-import Util.CurrentTimeImpl;
-import Util.ICurrentTime;
+import Util.TimeProviderImpl;
+import Util.ITimeProvider;
 import Util.IKeyGenerator;
 import Util.IKeyGeneratorImpl;
-import Validation.ITokenValidation;
-import Validation.TokenValidation;
+import Validation.ITokenValidator;
+import Validation.TokenValidator;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
 /**
  * Created by previousdeveloper on 14.09.2015.
  */
-public class DIModule extends AbstractModule {
+public class AppModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        bind(ICurrentTime.class).to(CurrentTimeImpl.class).in(Singleton.class);
+        bind(ITimeProvider.class).to(TimeProviderImpl.class).in(Singleton.class);
         bind(IKeyGenerator.class).to(IKeyGeneratorImpl.class).in(Singleton.class);
         bind(IJwtAuthService.class).to(JwtAuthServiceImpl.class).in(Singleton.class);
-        bind(ITokenValidation.class).to(TokenValidation.class).in(Singleton.class);
+        bind(ITokenValidator.class).to(TokenValidator.class).in(Singleton.class);
         bind(IRedis.class).to(RedisImpl.class);
         bind(ISignupRepository.class).to(SignupRepositoryImpl.class).asEagerSingleton();
     }

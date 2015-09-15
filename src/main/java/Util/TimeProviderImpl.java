@@ -6,7 +6,7 @@ import java.time.ZoneId;
 /**
  * Created by previousdeveloper on 14.09.2015.
  */
-public class CurrentTimeImpl implements ICurrentTime {
+public class TimeProviderImpl implements ITimeProvider {
 
     public Long getCurrentTime() {
 

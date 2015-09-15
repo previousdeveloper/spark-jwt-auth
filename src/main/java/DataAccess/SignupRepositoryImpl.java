@@ -1,7 +1,7 @@
 package DataAccess;
 
-import Model.UserSignupModel;
-import RedisContext.IRedis;
+import Model.UserModel;
+import RedisProvider.IRedis;
 import Util.JsonTransformer;
 import com.google.inject.Inject;
 
@@ -18,13 +18,13 @@ public class SignupRepositoryImpl implements ISignupRepository {
         this.redis = redis;
     }
 
-    public void saveUser(UserSignupModel userSignupModel) {
+    public void saveUser(UserModel userModel) {
 
         String value = null;
 
         try {
-            value = new JsonTransformer().render(userSignupModel);
-            redis.jedis().set("signUp", value);
+            value = new JsonTransformer().render(userModel);
+            redis.set("signUp", value);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -3,7 +3,7 @@ package Validation;
 /**
  * Created by previousdeveloper on 15.09.2015.
  */
-public interface ITokenValidation {
+public interface ITokenValidator {
 
-    boolean validateToken(String token);
+    boolean validate(String token);
 }
