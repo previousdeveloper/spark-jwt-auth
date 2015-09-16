@@ -24,7 +24,7 @@ public class SignupRepositoryImpl implements ISignupRepository {
 
         try {
             value = new JsonTransformer().render(userModel);
-            redis.set("signUp", value);
+            redis.set("user", value);
         } catch (Exception e) {
             e.printStackTrace();
         }

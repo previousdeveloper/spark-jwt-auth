@@ -1,43 +1,52 @@
 package Validation;
 
+import DataAccess.IUserRepository;
 import RedisProvider.IRedis;
-import Util.IKeyGenerator;
+import Util.Constant;
+import Util.ITimeProvider;
 import com.google.inject.Inject;
 import io.jsonwebtoken.Jwts;
-
-import java.security.Key;
 
 /**
  * Created by previousdeveloper on 14.09.2015.
  */
 public class TokenValidator implements ITokenValidator {
 
-    private IKeyGenerator keyGenerator;
+
     private IRedis redis;
+    private IUserRepository IUserRepository;
+    private ITimeProvider timeProvider;
 
     @Inject
-    public TokenValidator(IKeyGenerator keyGenerator, IRedis redis) {
-        this.keyGenerator = keyGenerator;
+    public TokenValidator(IRedis redis, IUserRepository IUserRepository, ITimeProvider timeProvider) {
+
         this.redis = redis;
 
+        this.IUserRepository = IUserRepository;
+        this.timeProvider = timeProvider;
     }
 
     public boolean validate(String token) {
 
         boolean valid = false;
 
-        Key key = keyGenerator.getKey();
 
-        Object username = Jwts.parser().setSigningKey(new byte[1]).parseClaimsJws(token)
+        Object username = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token)
                 .getBody().get("username");
 
-        Object password = Jwts.parser().setSigningKey(new byte[1]).parseClaimsJws(token)
-                .getHeader().get("password");
+        Object password = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token)
+                .getBody().get("password");
 
-        Object expireTime = Jwts.parser().setSigningKey(new byte[1]).parseClaimsJws(token)
-                .getHeader().get("expireTime");
+        Object expireTime = Jwts.parser().setSigningKey(Constant.JWT_SECRET).parseClaimsJws(token)
+                .getBody().get("expireTime");
 
-        String signUp = redis.get("signUp");
+        Long currentTimeInMilisecond = timeProvider.getCurrentTime();
+
+        if (IUserRepository.getUser().getUsername().equals(username) &&
+                IUserRepository.getUser().getPassword().equals(password) &&
+                (Long) expireTime > currentTimeInMilisecond) {
+            valid = true;
+        }
 
         return valid;
     }

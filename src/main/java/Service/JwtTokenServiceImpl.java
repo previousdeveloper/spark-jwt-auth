@@ -6,13 +6,13 @@ import com.google.inject.Inject;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-public class JwtAuthServiceImpl implements IJwtAuthService {
+public class JwtTokenServiceImpl implements IJwtTokenService {
 
 
     private ITimeProvider currentTime;
 
     @Inject
-    public JwtAuthServiceImpl(ITimeProvider currentTime) {
+    public JwtTokenServiceImpl(ITimeProvider currentTime) {
 
         this.currentTime = currentTime;
     }
@@ -26,7 +26,8 @@ public class JwtAuthServiceImpl implements IJwtAuthService {
         String token = Jwts.builder()
                 .claim("username", username)
                 .claim("password", password)
-                .claim("expireTime", currentTime.getCurrentTime())
+                        //Todo:Config
+                .claim("expireTime", currentTime.getCurrentTime() + Constant.TOKEN_TIMEOUT_INMILISECOND)
                 .signWith(hs512, Constant.JWT_SECRET)
                 .compact();
 
