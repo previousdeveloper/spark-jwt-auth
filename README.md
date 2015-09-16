@@ -9,8 +9,11 @@ authentication/registration/ using a REST API.
 Be sure install **them!**
 - **Java 8**
 - **Redis**
-Redis run on default port
+
+Redis run on default port.
+
 ## How do I use it?
+
 Install maven dependency and launch the **server**.
 
 ### Register (POST /register)
