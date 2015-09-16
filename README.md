@@ -44,5 +44,7 @@ Install maven dependency and launch the **server**.
 }
 ```
 
+## FORK IT :)
 
-
+- [ ] Unit and Integration Test
+- [ ] Hash or Encrypted password
