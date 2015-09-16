@@ -8,14 +8,14 @@ import com.google.inject.Inject;
 /**
  * Created by previousdeveloper on 16.09.2015.
  */
-public class IUserRepositoryImpl implements IUserRepository {
+public class UserRepositoryImpl implements IUserRepository {
 
     private IRedis redis;
     private Gson gson;
     private UserModel userModel = null;
 
     @Inject
-    public IUserRepositoryImpl(IRedis redis) {
+    public UserRepositoryImpl(IRedis redis) {
         this.redis = redis;
         gson = new Gson();
     }

@@ -3,7 +3,7 @@ package Bootstrapper;
 import DataAccess.ISignupRepository;
 import DataAccess.SignupRepositoryImpl;
 import DataAccess.IUserRepository;
-import DataAccess.IUserRepositoryImpl;
+import DataAccess.UserRepositoryImpl;
 import RedisProvider.IRedis;
 import RedisProvider.RedisImpl;
 import Service.IJwtTokenService;
@@ -30,6 +30,6 @@ public   class  AppModule extends AbstractModule {
         bind(ITokenValidator.class).to(TokenValidator.class).in(Singleton.class);
         bind(IRedis.class).to(RedisImpl.class);
         bind(ISignupRepository.class).to(SignupRepositoryImpl.class).asEagerSingleton();
-        bind(IUserRepository.class).to(IUserRepositoryImpl.class).asEagerSingleton();
+        bind(IUserRepository.class).to(UserRepositoryImpl.class).asEagerSingleton();
     }
 }
