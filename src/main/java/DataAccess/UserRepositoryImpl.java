@@ -5,9 +5,7 @@ import RedisProvider.IRedis;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 
-/**
- * Created by previousdeveloper on 16.09.2015.
- */
+
 public class UserRepositoryImpl implements IUserRepository {
 
     private IRedis redis;

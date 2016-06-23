@@ -1,9 +1,6 @@
 package Bootstrapper;
 
-import DataAccess.ISignupRepository;
-import DataAccess.SignupRepositoryImpl;
-import DataAccess.IUserRepository;
-import DataAccess.UserRepositoryImpl;
+import DataAccess.*;
 import RedisProvider.IRedis;
 import RedisProvider.RedisImpl;
 import Service.IJwtTokenService;
@@ -17,9 +14,6 @@ import Validation.TokenValidator;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
-/**
- * Created by previousdeveloper on 14.09.2015.
- */
 public   class  AppModule extends AbstractModule {
     @Override
     protected void configure() {
@@ -31,5 +25,6 @@ public   class  AppModule extends AbstractModule {
         bind(IRedis.class).to(RedisImpl.class);
         bind(ISignupRepository.class).to(SignupRepositoryImpl.class).asEagerSingleton();
         bind(IUserRepository.class).to(UserRepositoryImpl.class).asEagerSingleton();
+        bind(ITokenRepository.class).to(TokenRepositoryImpl.class).asEagerSingleton();
     }
 }

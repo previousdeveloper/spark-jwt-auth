@@ -1,8 +1,6 @@
 package Model;
 
-/**
- * Created by previousdeveloper on 14.09.2015.
- */
+
 public class UserModel {
     private String username;
     private String password;

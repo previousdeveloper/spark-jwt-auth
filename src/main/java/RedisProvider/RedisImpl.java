@@ -2,9 +2,7 @@ package RedisProvider;
 
 import redis.clients.jedis.Jedis;
 
-/**
- * Created by previousdeveloper on 14.09.2015.
- */
+
 public class RedisImpl implements IRedis {
 
     Jedis jedisConnector = new Jedis("localhost");

@@ -1,9 +1,12 @@
 package Service;
 
-/**
- * Created by previousdeveloper on 14.09.2015.
- */
 public interface IJwtTokenService {
 
     String tokenGenerator(String username, String password);
+
+    String generateAccessToken(String client_id, String client_secret);
+
+    String getRefreshToken();
+
+    String generateAccessToken(String refreshToken);
 }

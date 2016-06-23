@@ -5,9 +5,6 @@ import RedisProvider.IRedis;
 import Util.JsonTransformer;
 import com.google.inject.Inject;
 
-/**
- * Created by previousdeveloper on 14.09.2015.
- */
 public class SignupRepositoryImpl implements ISignupRepository {
 
     private IRedis redis;

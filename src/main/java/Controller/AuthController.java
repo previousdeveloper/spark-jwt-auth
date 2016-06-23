@@ -2,8 +2,10 @@ package Controller;
 
 import Bootstrapper.AppModule;
 import DataAccess.ISignupRepository;
+import DataAccess.ITokenRepository;
 import Model.UserModel;
 import Service.IJwtTokenService;
+import Util.Constant;
 import Validation.ITokenValidator;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -15,9 +17,6 @@ import java.util.Map;
 
 import static spark.Spark.*;
 
-/**
- * Created by previousdeveloper on 14.09.2015.
- */
 
 public class AuthController {
 
@@ -28,7 +27,7 @@ public class AuthController {
         ISignupRepository signupRepository = injector.getInstance(ISignupRepository.class);
         IJwtTokenService jwtAuthService = injector.getInstance(IJwtTokenService.class);
         ITokenValidator tokenValidation = injector.getInstance(ITokenValidator.class);
-
+        ITokenRepository tokenRepository = injector.getInstance(ITokenRepository.class);
         //TODO: DI CONTAINER
         Gson gson = new Gson();
 
@@ -38,7 +37,7 @@ public class AuthController {
 
 
             if (xApiToken != null) {
-                boolean result = tokenValidation.validate(xApiToken);
+                boolean result = tokenValidation.validateOauth(xApiToken);
 
                 if (!result) {
                     halt(401, "token expired");
@@ -108,6 +107,26 @@ public class AuthController {
         post("/protected/deneme", (request, response) -> {
 
             return "SELAM BASARILI GIRIS YAPTIN :)";
+        });
+
+        post("/oauth2/token", (request, response) -> {
+            OauthRequest oauthRequest = new OauthRequest();
+            OauthResponse oauthResponse = new OauthResponse();
+            oauthRequest = gson.fromJson(request.body(), OauthRequest.class);
+
+            if (oauthRequest.getGrant_Type().equals("client_credentials")) {
+                if (tokenRepository.checkClientInfo(oauthRequest.getClient_Id(), oauthRequest.getClient_Secret())) {
+                    oauthResponse.access_token = jwtAuthService.generateAccessToken(oauthRequest.getClient_Id(), oauthRequest.getClient_Secret());
+                    oauthResponse.refresh_token = jwtAuthService.getRefreshToken();
+                }
+            } else if (oauthRequest.getGrant_Type().equals("refresh_token")) {
+                if (tokenRepository.checkRefreshToken(oauthRequest.getRefresh_Token())) {
+                    oauthResponse.access_token = jwtAuthService.generateAccessToken(oauthRequest.getRefresh_Token());
+                    oauthResponse.refresh_token = jwtAuthService.getRefreshToken();
+                }
+            }
+
+            return gson.toJson(oauthResponse);
         });
     }
 }
