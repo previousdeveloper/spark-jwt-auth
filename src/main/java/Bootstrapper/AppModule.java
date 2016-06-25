@@ -1,6 +1,10 @@
 package Bootstrapper;
 
+import ControllerHandler.AuthControllerHandler;
+import ControllerHandler.AuthControllerHandlerImpl;
 import DataAccess.*;
+import Helper.GsonHelper;
+import Helper.JsonHelper;
 import RedisProvider.IRedis;
 import RedisProvider.RedisImpl;
 import Service.IJwtTokenService;
@@ -26,5 +30,7 @@ public   class  AppModule extends AbstractModule {
         bind(ISignupRepository.class).to(SignupRepositoryImpl.class).asEagerSingleton();
         bind(IUserRepository.class).to(UserRepositoryImpl.class).asEagerSingleton();
         bind(ITokenRepository.class).to(TokenRepositoryImpl.class).asEagerSingleton();
+        bind(AuthControllerHandler.class).to(AuthControllerHandlerImpl.class).asEagerSingleton();
+        bind(JsonHelper.class).to(GsonHelper.class).asEagerSingleton();
     }
 }
