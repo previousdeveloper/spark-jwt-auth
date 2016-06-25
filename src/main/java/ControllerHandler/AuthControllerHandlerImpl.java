@@ -25,8 +25,16 @@ public class AuthControllerHandlerImpl implements AuthControllerHandler {
     }
 
     @Override
-    public OauthResponse generateToken(OauthRequest oauthRequest) {
+    public String generateResponse(Request request) {
 
+        OauthRequest oauthRequest = gsonHelper.fromJson(request.body(),OauthRequest.class);
+        OauthResponse oauthResponse = GenerateToken(oauthRequest);
+        String result = gsonHelper.toJson(oauthResponse);
+
+        return result;
+    }
+
+    private OauthResponse GenerateToken(OauthRequest oauthRequest) {
 
         OauthResponse result = new OauthResponse();
         if (oauthRequest.getGrant_Type().equals("client_credentials")) {
@@ -40,13 +48,6 @@ public class AuthControllerHandlerImpl implements AuthControllerHandler {
                 result.refresh_token = jwtTokenService.getRefreshToken();
             }
         }
-        return result;
-    }
-
-    @Override
-    public OauthRequest mapOauthRequest(Request request) {
-
-        OauthRequest result = gsonHelper.fromJson(request.body(), OauthRequest.class);
         return result;
     }
 

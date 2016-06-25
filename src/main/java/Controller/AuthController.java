@@ -5,10 +5,7 @@ import ControllerHandler.AuthControllerHandler;
 import DataAccess.ISignupRepository;
 import Helper.GsonHelper;
 import Helper.JsonHelper;
-import Model.OauthRequest;
-import Model.OauthResponse;
 import Model.UserModel;
-import Service.IJwtTokenService;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.inject.Guice;
@@ -111,9 +108,8 @@ public class AuthController {
         });
 
         post("/oauth2/token", (request, response) -> {
-            OauthRequest oauthRequest = gsonHelper.fromJson(request.body(),OauthRequest.class);
-            OauthResponse oauthResponse  = authControllerHandler.generateToken(oauthRequest);
-            String result = gsonHelper.toJson(oauthResponse);
+
+            String result  = authControllerHandler.generateResponse(request);
 
             return result;
         });
