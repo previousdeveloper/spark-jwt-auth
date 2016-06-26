@@ -1,15 +1,11 @@
 package Controller;
 
-import Bootstrapper.AppModule;
 import ControllerHandler.AuthControllerHandler;
 import DataAccess.ISignupRepository;
-import Helper.GsonHelper;
 import Helper.JsonHelper;
 import Model.UserModel;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,22 +15,28 @@ import static spark.Spark.*;
 
 public class AuthController {
 
-    public AuthController() {
+    private ISignupRepository signupRepository;
+    private AuthControllerHandler authControllerHandler;
+    private JsonHelper jsonHelper;
+
+    @Inject
+    public AuthController(ISignupRepository signupRepository, AuthControllerHandler authControllerHandler, JsonHelper jsonHelper) {
+        this.signupRepository = signupRepository;
+        this.authControllerHandler = authControllerHandler;
+        this.jsonHelper = jsonHelper;
 
 
-        Injector injector = Guice.createInjector(new AppModule());
-        ISignupRepository signupRepository = injector.getInstance(ISignupRepository.class);
-        AuthControllerHandler authControllerHandler = injector.getInstance(AuthControllerHandler.class);
-        JsonHelper gsonHelper = injector.getInstance(GsonHelper.class);
+//        ISignupRepository signupRepository = injector.getInstance(ISignupRepository.class);
+//        AuthControllerHandler authControllerHandler = injector.getInstance(AuthControllerHandler.class);
+//        JsonHelper jsonHelper = injector.getInstance(GsonHelper.class);
         //TODO: DI CONTAINER
-        Gson gson = new Gson();
 
         before("/protected/*", (request, response) -> {
 
             String xApiToken = request.headers("X-API-TOKEN");
 
             if (xApiToken != null) {
-                boolean result =  authControllerHandler.validateRequest(xApiToken);
+                boolean result =  this.authControllerHandler.validateRequest(xApiToken);
 
                 if (!result) {
                     halt(401, "token expired");
@@ -87,8 +89,8 @@ public class AuthController {
 
             try {
 
-                userModel = gson.fromJson(request.body(), UserModel.class);
-                signupRepository.saveUser(userModel);
+                userModel = jsonHelper.fromJson(request.body(), UserModel.class);
+                this.signupRepository.saveUser(userModel);
                 user = new HashMap<>();
                 user.put("Registered:", userModel.getUsername());
 
@@ -99,7 +101,7 @@ public class AuthController {
                 return "INVALID JSON";
             }
 
-            return gson.toJson(user);
+            return jsonHelper.toJson(user);
         });
 
         post("/protected/deneme", (request, response) -> {
@@ -109,7 +111,7 @@ public class AuthController {
 
         post("/oauth2/token", (request, response) -> {
 
-            String result  = authControllerHandler.generateResponse(request);
+            String result  = this.authControllerHandler.generateResponse(request);
 
             return result;
         });
