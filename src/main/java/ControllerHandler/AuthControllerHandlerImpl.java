@@ -1,13 +1,10 @@
 package ControllerHandler;
 
-import Model.OauthRequest;
-import Model.OauthResponse;
 import DataAccess.ITokenRepository;
 import Helper.JsonHelper;
 import Service.IJwtTokenService;
 import Validation.ITokenValidator;
 import com.google.inject.Inject;
-import spark.Request;
 
 public class AuthControllerHandlerImpl implements AuthControllerHandler {
 
@@ -24,37 +21,31 @@ public class AuthControllerHandlerImpl implements AuthControllerHandler {
         this.tokenValidator = tokenValidator;
     }
 
-    @Override
-    public String generateResponse(Request request) {
-
-        OauthRequest oauthRequest = gsonHelper.fromJson(request.body(),OauthRequest.class);
-        OauthResponse oauthResponse = GenerateToken(oauthRequest);
-        String result = gsonHelper.toJson(oauthResponse);
-
-        return result;
-    }
-
-    private OauthResponse GenerateToken(OauthRequest oauthRequest) {
-
-        OauthResponse result = new OauthResponse();
-        if (oauthRequest.getGrant_Type().equals("client_credentials")) {
-            if (tokenRepository.checkClientInfo(oauthRequest.getClient_Id(), oauthRequest.getClient_Secret())) {
-                result.access_token = jwtTokenService.generateAccessToken(oauthRequest.getClient_Id(), oauthRequest.getClient_Secret());
-                result.refresh_token = jwtTokenService.getRefreshToken();
-            }
-        } else if (oauthRequest.getGrant_Type().equals("refresh_token")) {
-            if (tokenRepository.checkRefreshToken(oauthRequest.getRefresh_Token())) {
-                result.access_token = jwtTokenService.generateAccessToken(oauthRequest.getRefresh_Token());
-                result.refresh_token = jwtTokenService.getRefreshToken();
-            }
-        }
-        return result;
-    }
 
     @Override
     public boolean validateRequest(String token) {
 
         boolean result = tokenValidator.validateOauth(token);
         return result;
+    }
+
+    @Override
+    public boolean checkClientInfo(String client_id, String client_secret) {
+        return false;
+    }
+
+    @Override
+    public String generateAccessToken(String client_id, String client_secret) {
+        return null;
+    }
+
+    @Override
+    public boolean checkRefreshToken(String refresh_token) {
+        return false;
+    }
+
+    @Override
+    public String generateRefreshToken() {
+        return null;
     }
 }

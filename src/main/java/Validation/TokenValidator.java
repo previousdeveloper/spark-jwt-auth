@@ -70,4 +70,9 @@ public class TokenValidator implements ITokenValidator {
 
         return valid;
     }
+
+    @Override
+    public boolean validateTokenRequest() {
+        return true;
+    }
 }

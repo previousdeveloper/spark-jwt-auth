@@ -1,40 +1,34 @@
 package Model;
 
 public class OauthRequest {
-    public String Client_Id;
-    public String Client_Secret;
-    public String Grant_Type;
-    public String Refresh_Token;
+    private String clientId;
+    private String clientSecret;
+    private String grantType;
+    private String refreshToken;
+    private String username;
+    private String password;
 
-    public String getRefresh_Token() {
-        return Refresh_Token;
+    public String getUsername() {
+        return username;
     }
 
-    public void setRefresh_Token(String refresh_Token) {
-        Refresh_Token = refresh_Token;
+    public String getPassword() {
+        return password;
     }
 
-    public String getClient_Id() {
-        return Client_Id;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setClient_Id(String client_Id) {
-        Client_Id = client_Id;
+    public String getGrantType() {
+        return grantType;
     }
 
-    public String getClient_Secret() {
-        return Client_Secret;
+    public String getClientSecret() {
+        return clientSecret;
     }
 
-    public void setClient_Secret(String client_Secret) {
-        Client_Secret = client_Secret;
-    }
-
-    public String getGrant_Type() {
-        return Grant_Type;
-    }
-
-    public void setGrant_Type(String grant_Type) {
-        Grant_Type = grant_Type;
+    public String getClientId() {
+        return clientId;
     }
 }

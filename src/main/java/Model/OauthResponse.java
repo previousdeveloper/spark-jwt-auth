@@ -2,32 +2,31 @@ package Model;
 
 
 public class OauthResponse {
-    public String getAccess_token() {
-        return access_token;
+    private String accessToken;
+    private String refreshToken;
+    private long expiresIn;
+
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setAccess_token(String access_token) {
-        this.access_token = access_token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
-    public String getRefresh_token() {
-        return refresh_token;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setRefresh_token(String refresh_token) {
-        this.refresh_token = refresh_token;
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
-    public long getExpires_in() {
-        return expires_in;
+    public long getExpiresIn() {
+        return expiresIn;
     }
 
-    public void setExpires_in(int expires_in) {
-        this.expires_in = expires_in;
+    public void setExpiresIn(long expiresIn) {
+        this.expiresIn = expiresIn;
     }
-
-    public String access_token;
-    public String refresh_token;
-    public long expires_in;
-
 }
